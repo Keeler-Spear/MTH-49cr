@@ -7,22 +7,29 @@ public class PA1 {
         double[] sol;
         double approx;
         double error;
+        long startTime;
+        long stopTime;
 
         System.out.println("h = " + h + ":");
         System.out.print("Euler: y(" + t + ") = ");
+        startTime = System.nanoTime();
         sol = ODE.euler(ode, t0, y0, t, h);
+        stopTime = System.nanoTime();
         approx = sol[sol.length - 1];
         System.out.print(approx);
         error = Error.absolute(trueVal, approx);
-        System.out.println("  |  Error: " + error);
+        System.out.print("  |  Error: " + error);
+        System.out.println("  |  Execution time: " + (stopTime - startTime) + "ns");
 
         System.out.print("RK4: y(" + t + ") = ");
+        startTime = System.nanoTime();
         sol = ODE.rk4(ode, t0, y0, t, h);
+        stopTime = System.nanoTime();
         approx = sol[sol.length - 1];
         System.out.print(approx);
         error = Error.absolute(trueVal, approx);
-        System.out.println("  |  Error: " + error);
-
+        System.out.print("  |  Error: " + error);
+        System.out.println("  |  Execution time: " + (stopTime - startTime) + "ns");
     }
 
     public static void main(String[] args) {
