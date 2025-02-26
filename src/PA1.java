@@ -1,3 +1,6 @@
+//Compare euler and RK4 run 1000 times and average the time
+
+
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -98,12 +101,40 @@ public class PA1 {
         TriFunction<Double, Double, Double, Double> yP = (theta, x, y) -> x;
 
         double[][] circEul = ODE.eulerSystem(xP, yP, theta0, r0, thetaMax, h);
-        double[][] circRK4 = ODE.rk4System(xP, yP, theta0, r0, thetaMax, h);
+        Matrix eul = new Matrix(circEul);
+        eul = LinearAlgebra.transpose(eul);
 
+        long startTime = System.nanoTime();
+        double[][] circRK4 = ODE.rk4System(xP, yP, theta0, r0, thetaMax, h);
+        long stopTime = System.nanoTime();
+        Matrix rk4 = new Matrix(circRK4);
+        rk4 = LinearAlgebra.transpose(rk4);
 
         System.out.println("\n\n\n\nProblem 3:");
-        Graph.scatterPlot(circEul, "Euler", "DATAIN");
-        Graph.scatterPlot(circRK4, "RK4", "DATAIN");
+//        System.out.println("RK4: " + (stopTime - startTime) + "ns");
+
+        double[] circX = new double[6001];
+        double[] circY = new double[6001];
+
+        startTime = System.nanoTime();
+
+        for (int i = 0; i < 6001; i++) {
+            circX[i] = Math.cos(i * 0.02);
+        }
+        for (int i = 0; i < 6001; i++) {
+            circY[i] = Math.sin(i * 0.02);
+        }
+
+        stopTime = System.nanoTime();
+//        System.out.println("Circle: " + (stopTime - startTime) + "ns");
+
+
+        //ODE should be better with a larger stepsize
+        //Try averaging it out
+
+//        PyChart.scatter(new Matrix(circX), new Matrix(circY), "x" , "Y", "Analytical");
+//        PyChart.scatter(LinearAlgebra.vectorFromColumn(eul, 1), LinearAlgebra.vectorFromColumn(eul, 2), "x" , "Y", "Euler");
+//        PyChart.scatter(LinearAlgebra.vectorFromColumn(rk4, 1), LinearAlgebra.vectorFromColumn(rk4, 2), "x" , "Y", "RK4");
     }
 
 }

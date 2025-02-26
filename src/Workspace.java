@@ -5,10 +5,10 @@ import java.util.function.Function;
 
 public class Workspace {
     public static void main(String[] args) {
-        double h = 0.125;
+        double h = 0.5;
         double t0 = 1.0;
         double y0 = 2.0;
-        double tMax = 2.0;
+        double tMax = 100.0;
 
 
         BiFunction<Double, Double, Double> diffEq = (t, y) -> 1.0 + y / t;
@@ -20,6 +20,11 @@ public class Workspace {
         double exact = fnc.apply(tMax);
         double adamAp = sol[sol.length - 1];
         double rk4Ap = pcSol[pcSol.length - 1];
+
+        Matrix x = LinearAlgebra.linSpace(t0, tMax, h);
+        Matrix real = LinearAlgebra.applyFunction(x, fnc);
+        Matrix approx = new Matrix(sol);
+        Matrix pcApprox = new Matrix(pcSol);
 
         System.out.println("Exact " + exact);
         System.out.println("Adam's Approx: " + adamAp + " | Error:" + Error.absolute(exact, adamAp));
