@@ -7,7 +7,7 @@ import java.util.function.Function;
 public class PA1 {
 
     private static void testODE(BiFunction ode, double trueVal, double t0, double y0, double t, double h) {
-        double[] sol;
+        Matrix sol;
         double approx;
         double error;
         long startTime;
@@ -15,24 +15,29 @@ public class PA1 {
 
         System.out.println("h = " + h + ":");
         System.out.print("Euler: y(" + t + ") = ");
-        startTime = System.nanoTime();
         sol = ODE.euler(ode, t0, y0, t, h);
+        startTime = System.nanoTime();
+        for (int i = 0; i < 1000; i++) {
+            sol = ODE.euler(ode, t0, y0, t, h);
+        }
         stopTime = System.nanoTime();
-        approx = sol[sol.length - 1];
+        approx = sol.getValue(sol.getRows(), 1);
         System.out.print(approx);
         error = Error.absolute(trueVal, approx);
         System.out.print("  |  Error: " + error);
-        System.out.println("  |  Execution time: " + (stopTime - startTime) + "ns");
+        System.out.println("  |  Execution time: " + (stopTime - startTime)/1000 + "ns");
 
         System.out.print("RK4: y(" + t + ") = ");
         startTime = System.nanoTime();
-        sol = ODE.rk4(ode, t0, y0, t, h);
+        for (int i = 0; i < 1000; i++) {
+            sol = ODE.rk4(ode, t0, y0, t, h);
+        }
         stopTime = System.nanoTime();
-        approx = sol[sol.length - 1];
+        approx = sol.getValue(sol.getRows(), 1);
         System.out.print(approx);
         error = Error.absolute(trueVal, approx);
         System.out.print("  |  Error: " + error);
-        System.out.println("  |  Execution time: " + (stopTime - startTime) + "ns");
+        System.out.println("  |  Execution time: " + (stopTime - startTime)/1000 + "ns");
     }
 
     public static void main(String[] args) {
@@ -95,23 +100,22 @@ public class PA1 {
         double h = 0.02;
         double theta0 = 0;
         double thetaMax = 120;
-        double[] r0 = {1, 0}; //First element is the radius
 
         TriFunction<Double, Double, Double, Double> xP = (theta, x, y) -> -y;
         TriFunction<Double, Double, Double, Double> yP = (theta, x, y) -> x;
 
-        double[][] circEul = ODE.eulerSystem(xP, yP, theta0, r0, thetaMax, h);
-        Matrix eul = new Matrix(circEul);
-        eul = LinearAlgebra.transpose(eul);
-
         long startTime = System.nanoTime();
-        double[][] circRK4 = ODE.rk4System(xP, yP, theta0, r0, thetaMax, h);
+        Matrix eul = ODE.eulerSystem(xP, yP, theta0, 1, 0, thetaMax, h);
         long stopTime = System.nanoTime();
-        Matrix rk4 = new Matrix(circRK4);
-        rk4 = LinearAlgebra.transpose(rk4);
 
         System.out.println("\n\n\n\nProblem 3:");
-//        System.out.println("RK4: " + (stopTime - startTime) + "ns");
+        System.out.println("Euler: " + (stopTime - startTime) + "ns");
+
+        startTime = System.nanoTime();
+        Matrix rk4 = ODE.rk4System(xP, yP, theta0, 1, 0, thetaMax, h);
+        stopTime = System.nanoTime();
+
+        System.out.println("RK4: " + (stopTime - startTime) + "ns");
 
         double[] circX = new double[6001];
         double[] circY = new double[6001];
@@ -119,22 +123,23 @@ public class PA1 {
         startTime = System.nanoTime();
 
         for (int i = 0; i < 6001; i++) {
-            circX[i] = Math.cos(i * 0.02);
+            circX[i] = Math.cos(i * h);
         }
         for (int i = 0; i < 6001; i++) {
-            circY[i] = Math.sin(i * 0.02);
+            circY[i] = Math.sin(i * h);
         }
 
         stopTime = System.nanoTime();
-//        System.out.println("Circle: " + (stopTime - startTime) + "ns");
+        System.out.println("Circle: " + (stopTime - startTime) + "ns");
 
 
         //ODE should be better with a larger stepsize
         //Try averaging it out
 
+
 //        PyChart.scatter(new Matrix(circX), new Matrix(circY), "x" , "Y", "Analytical");
-//        PyChart.scatter(LinearAlgebra.vectorFromColumn(eul, 1), LinearAlgebra.vectorFromColumn(eul, 2), "x" , "Y", "Euler");
-//        PyChart.scatter(LinearAlgebra.vectorFromColumn(rk4, 1), LinearAlgebra.vectorFromColumn(rk4, 2), "x" , "Y", "RK4");
+        PyChart.scatter(LinearAlgebra.vectorFromColumn(eul, 1), LinearAlgebra.vectorFromColumn(eul, 2), "x" , "Y", "Euler");
+        PyChart.scatter(LinearAlgebra.vectorFromColumn(rk4, 1), LinearAlgebra.vectorFromColumn(rk4, 2), "x" , "Y", "RK4");
     }
 
 }
