@@ -34,8 +34,8 @@ public class PA2 {
         double adamAp = sol.getValue(sol.getRows(), 1);
         double pcAp =  pcSol.getValue(pcSol.getRows(), 1);
 
-        System.out.println("AB: " + adamAp + " | Error: " + Error.absolute(exact, adamAp) + " | Execution time: " + time1);
-        System.out.println("PC: " + pcAp + " | Error: " + Error.absolute(exact, pcAp) + " | Execution time: " + time2);
+        System.out.println("AB: " + adamAp + " | Error: " + Error.absolute(exact, adamAp) + " | Execution time: " + time1 + " ns");
+        System.out.println("PC: " + pcAp + " | Error: " + Error.absolute(exact, pcAp) + " | Execution time: " + time2 + " ns");
 
         sol = ODE.adamsBash(diffEq, t0, y0, tMax, h);
         start = System.nanoTime();
@@ -57,8 +57,8 @@ public class PA2 {
         pcAp = pcSol.getValue(pcSol.getRows(), 1);
 
         System.out.println("\nApproximating Prior Values:");
-        System.out.println("AB: " + adamAp + " | Error: " + Error.absolute(exact, adamAp) + " | Execution time: " + time1);
-        System.out.println("PC: " + pcAp + " | Error: " + Error.absolute(exact, pcAp) + " | Execution time: " + time2);
+        System.out.println("AB: " + adamAp + " | Error: " + Error.absolute(exact, adamAp) + " | Execution time: " + time1 + " ns");
+        System.out.println("PC: " + pcAp + " | Error: " + Error.absolute(exact, pcAp) + " | Execution time: " + time2 + " ns");
 
         Matrix eul = ODE.euler(diffEq, t0, y0, tMax, h);
         start = System.nanoTime();
@@ -79,8 +79,8 @@ public class PA2 {
         double rkVal = rk4.getValue(rk4.getRows(), 1);
 
         System.out.println("\nOther Methods:");
-        System.out.println("Euler: " + eulVal + " | Error: " + Error.absolute(exact, eulVal) + " | Execution time: " + time1);
-        System.out.println("RK4: " + rkVal + " | Error: " + Error.absolute(exact, rkVal) + " | Execution time: " + time2);
+        System.out.println("Euler: " + eulVal + " | Error: " + Error.absolute(exact, eulVal) + " | Execution time: " + time1 + " ns");
+        System.out.println("RK4: " + rkVal + " | Error: " + Error.absolute(exact, rkVal) + " | Execution time: " + time2 + " ns");
 
 
     }
@@ -97,51 +97,66 @@ public class PA2 {
         double tMax = 20.0;
 
 
-        BiFunction<Double, Double, Double> diffEq = (t, y) -> 1.0 + y / t;
-        Function<Double, Double> fnc = (t) -> t * Math.log(t) + 2 * t;
-
-        System.out.println("Problem 2a");
-        System.out.println("Exact: " + fnc.apply(tMax));
-        System.out.println("\nh = " + h0 + "\n");
-        testODE(fnc, diffEq, t0, y0, tMax, h0);
-        System.out.println("\nh = " + h1 + "\n");
-        testODE(fnc, diffEq, t0, y0, tMax, h1);
-        System.out.println("\nh = " + h2 + "\n");
-        testODE(fnc, diffEq, t0, y0, tMax, h2);
-
-        t0 = 0;
-        y0 = 1;
-        tMax = 1;
-        diffEq = (t, y) -> Math.cos(2 * t) + Math.sin(3 * t);
-        fnc = (t) -> 0.5 * Math.sin(2 * t) - 1.0/3.0 * Math.cos(3 * t) + 4.0/3.0;
-        System.out.println("Problem 2b");
-        System.out.println("Exact: " + fnc.apply(tMax));
-        System.out.println("\nh = " + h0 + "\n");
-        testODE(fnc, diffEq, t0, y0, tMax, h0);
-        System.out.println("\nh = " + h1 + "\n");
-        testODE(fnc, diffEq, t0, y0, tMax, h1);
-        System.out.println("\nh = " + h2 + "\n");
-        testODE(fnc, diffEq, t0, y0, tMax, h2);
-
-        t0 = 1;
-        y0 = 2;
-        tMax = 2;
-        diffEq = (t, y) -> (1 + t) / (1 + y);
-        fnc = (t) -> Math.sqrt(t * t + 2 * t + 6) - 1;
-        System.out.println("Problem 2c");
-        System.out.println("Exact: " + fnc.apply(tMax));
-        System.out.println("\nh = " + h0 + "\n");
-        testODE(fnc, diffEq, t0, y0, tMax, h0);
-        System.out.println("\nh = " + h1 + "\n");
-        testODE(fnc, diffEq, t0, y0, tMax, h1);
-        System.out.println("\nh = " + h2 + "\n");
-        testODE(fnc, diffEq, t0, y0, tMax, h2);
+//        BiFunction<Double, Double, Double> diffEq = (t, y) -> 1.0 + y / t;
+//        Function<Double, Double> fnc = (t) -> t * Math.log(t) + 2 * t;
+//
+//        System.out.println("Problem 2a");
+//        System.out.println("Exact: " + fnc.apply(tMax));
+//        System.out.println("\nh = " + h0 + "\n");
+//        testODE(fnc, diffEq, t0, y0, tMax, h0);
+//        System.out.println("\nh = " + h1 + "\n");
+//        testODE(fnc, diffEq, t0, y0, tMax, h1);
+//        System.out.println("\nh = " + h2 + "\n");
+//        testODE(fnc, diffEq, t0, y0, tMax, h2);
+//
+//        t0 = 0;
+//        y0 = 1;
+//        tMax = 1;
+//        diffEq = (t, y) -> Math.cos(2 * t) + Math.sin(3 * t);
+//        fnc = (t) -> 0.5 * Math.sin(2 * t) - 1.0/3.0 * Math.cos(3 * t) + 4.0/3.0;
+//        System.out.println("Problem 2b");
+//        System.out.println("Exact: " + fnc.apply(tMax));
+//        System.out.println("\nh = " + h0 + "\n");
+//        testODE(fnc, diffEq, t0, y0, tMax, h0);
+//        System.out.println("\nh = " + h1 + "\n");
+//        testODE(fnc, diffEq, t0, y0, tMax, h1);
+//        System.out.println("\nh = " + h2 + "\n");
+//        testODE(fnc, diffEq, t0, y0, tMax, h2);
+//
+//        t0 = 1;
+//        y0 = 2;
+//        tMax = 2;
+//        diffEq = (t, y) -> (1 + t) / (1 + y);
+//        fnc = (t) -> Math.sqrt(t * t + 2 * t + 6) - 1;
+//        System.out.println("Problem 2c");
+//        System.out.println("Exact: " + fnc.apply(tMax));
+//        System.out.println("\nh = " + h0 + "\n");
+//        testODE(fnc, diffEq, t0, y0, tMax, h0);
+//        System.out.println("\nh = " + h1 + "\n");
+//        testODE(fnc, diffEq, t0, y0, tMax, h1);
+//        System.out.println("\nh = " + h2 + "\n");
+//        testODE(fnc, diffEq, t0, y0, tMax, h2);
 
         //QUESTION 3
 
-//        Function<Double, Double> u = (t) -> Math.sin(t * t) + Math.cos(t * t);
-//        Matrix x = LinearAlgebra.linSpace(1, 20, 0.1);
-//        PyChart.fnc(x, LinearAlgebra.applyFunction(x, u), "U(t)", "t", "U", "Title");
+        double exactVal = Math.cos(20*20) + Math.sin(20 * 20);
+        TriFunction<Double, Double, Double, Double> odeP3 = (t, y, yp) -> (1 / t) * yp - 4 * (t * t) * y;
+        Matrix x = LinearAlgebra.linSpace(1, 20, 0.01);
+        Matrix sol3 = ODE.solveIVP(odeP3, 1.0, 1.38177329068, -0.60233735788, 20,0.01);
+        sol3 = LinearAlgebra.vectorFromColumn(sol3, 1);
+        System.out.println("u(20) = " + sol3.getValue(sol3.getRows(), 1));
+        System.out.println("Steps: " + (sol3.getRows() - 1));
+        System.out.println("Absolute Error = " + Error.absolute(exactVal, sol3.getValue(sol3.getRows(), 1)));
+        sol3.addRowTop(new double[]{1.38177329068});//Fixing the matrix size
+//        PyChart.plot(x, sol3, "_", "t", "y", "RK4 Solution");
+
+        sol3 = ODE.solveIVP(odeP3, 1.0, 1.38177329068, -0.60233735788, 20,0.002);
+        sol3 = LinearAlgebra.vectorFromColumn(sol3, 1);
+        System.out.println("\nu(20) = " + sol3.getValue(sol3.getRows(), 1));
+        System.out.println("Steps: " + (sol3.getRows() - 1));
+        System.out.println("Absolute Error = " + Error.absolute(exactVal, sol3.getValue(sol3.getRows() - 1, 1)));
+
+
     }
 
 }
