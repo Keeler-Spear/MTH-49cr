@@ -16,7 +16,7 @@ public class PA5 {
 
         double error = 0.0;
         temp = LinearAlgebra.subtractMatrices(analSolMat, apSol);
-        for (int i = 2; i < temp.getCols(); i++) {
+        for (int i = 1; i <= temp.getCols(); i++) {
             error += Math.abs(LinearAlgebra.colSum(temp, i));
         }
 
@@ -29,8 +29,8 @@ public class PA5 {
         }
 
         if (plot) {
-            PyChart.plot3D(xLin, yLin, analSol, "_", "x", "t", "z", "Analytical Solution");
-            PyChart.plot3D(xLin, yLin, apSol, "_", "x", "t", "z", "Approximate Solution");
+//            PyChart.plot3D(xLin, yLin, analSol, "_", "x", "y", "u(x,y)", "Analytical Solution");
+            PyChart.plot3D(xLin, yLin, apSol, "_", "x", "y", "u(x,y)", "Approximate Solution");
         }
 
 
@@ -51,19 +51,34 @@ public class PA5 {
         double k;
 
         h = 0.5;
-        k = 0.25;
+        k = h;
         apSol = PDE.solveLaEq(f1, f2, g1, g2, xMin, xMax, yMin, yMax, h, k);
-        compareSolutions(analSolFnc, apSol, xMin, xMax, yMin, yMax, h, k,true, false);
+        compareSolutions(analSolFnc, apSol, xMin, xMax, yMin, yMax, h, k,false, false);
 
         h = 0.25;
-        k = 0.125;
+        k = h;
         apSol = PDE.solveLaEq(f1, f2, g1, g2, xMin, xMax, yMin, yMax, h, k);
         compareSolutions(analSolFnc, apSol, xMin, xMax, yMin, yMax, h, k,false, false);
 
-        h = 0.125;
-        k = 0.0625;
+        h = 0.1;
+        k = h;
         apSol = PDE.solveLaEq(f1, f2, g1, g2, xMin, xMax, yMin, yMax, h, k);
         compareSolutions(analSolFnc, apSol, xMin, xMax, yMin, yMax, h, k,false, false);
+
+        h = 0.5;
+        k = 0.25;
+        apSol = PDE.solveLaEq(f1, f2, g1, g2, xMin, xMax, yMin, yMax, h, k);
+        compareSolutions(analSolFnc, apSol, xMin, xMax, yMin, yMax, h, k,false, true);
+
+//        h = 0.25;
+//        k = 0.125;
+//        apSol = PDE.solveLaEq(f1, f2, g1, g2, xMin, xMax, yMin, yMax, h, k);
+//        compareSolutions(analSolFnc, apSol, xMin, xMax, yMin, yMax, h, k,false, false);
+//
+//        h = 0.125;
+//        k = 0.0625;
+//        apSol = PDE.solveLaEq(f1, f2, g1, g2, xMin, xMax, yMin, yMax, h, k);
+//        compareSolutions(analSolFnc, apSol, xMin, xMax, yMin, yMax, h, k,false, false);
 
 //        h = 0.0625;
 //        k = 0.0375;

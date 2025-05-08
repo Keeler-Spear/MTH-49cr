@@ -5,7 +5,7 @@ public class PA4 {
 
     final static boolean runQ1 = false;
     final static boolean runQ3 = false;
-    final static boolean runQ4 = false;
+    final static boolean runQ4 = true;
 
 
 
